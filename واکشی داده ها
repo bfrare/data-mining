@@ -1,0 +1,499 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPS4QQnI0yWQX4jGxsftGou",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/bfrare/data-mining/blob/main/%D9%88%D8%A7%DA%A9%D8%B4%DB%8C%20%D8%AF%D8%A7%D8%AF%D9%87%20%D9%87%D8%A7\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**خواندن ساده فایل متنی محلی**"
+      ],
+      "metadata": {
+        "id": "KyBTUGlanWLo"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "path = \"/content/myText teacher.txt\"\n",
+        "with open(path, \"r\", encoding=\"utf-8\") as f:\n",
+        "    text = f.read()\n",
+        "print(\"طول :\", len(text))\n",
+        "print(text[:])  # نمایش ۵۰۰ کاراکتر اول"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "YjZDKZyOnVC2",
+        "outputId": "5d170ba4-ddce-4362-b98a-de02beb7491d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "طول : 3038\n",
+            "Steven Paul Jobs (February 24, 1955 – October 5, 2011) was an American business magnate, inventor, and investor. He was the co-founder, chairman, and CEO of Apple; the chairman and majority shareholder of Pixar; a member of The Walt Disney Company's board of directors following its acquisition of Pixar; and the founder, chairman, and CEO of NeXT. He was a pioneer of the personal computer revolution of the 1970s and 1980s, along with his early business partner and fellow Apple co-founder Steve Wozniak.\n",
+            "\n",
+            "Jobs was born in San Francisco to a Syrian father and German-American mother. He was adopted shortly after his birth. Jobs attended Reed College in 1972 before withdrawing that same year. In 1974, he traveled through India seeking enlightenment before later studying Zen Buddhism. He and Wozniak co-founded Apple in 1976 to sell Wozniak's Apple I personal computer. Together the duo gained fame and wealth a year later with production and sale of the Apple II, one of the first highly successful mass-produced microcomputers. Jobs saw the commercial potential of the Xerox Alto in 1979, which was mouse-driven and had a graphical user interface (GUI). This led to the development of the unsuccessful Apple Lisa in 1983, followed by the breakthrough Macintosh in 1984, the first mass-produced computer with a GUI. The Macintosh introduced the desktop publishing industry in 1985 with the addition of the Apple LaserWriter, the first laser printer to feature vector graphics.\n",
+            "\n",
+            "In 1985, Jobs was forced out of Apple after a long power struggle with the company's board and its then-CEO, John Sculley. That same year, Jobs took a few Apple employees with him to found NeXT, a computer platform development company that specialized in computers for higher-education and business markets. In addition, he helped to develop the visual effects industry when he funded the computer graphics division of George Lucas's Lucasfilm in 1986. The new company was Pixar, which produced the first 3D computer-animated feature film Toy Story (1995) and went on to become a major animation studio, producing over 25 films since.\n",
+            "\n",
+            "In 1997, Jobs returned to Apple as CEO after the company's acquisition of NeXT. He was largely responsible for reviving Apple, which was on the verge of bankruptcy. He worked closely with British designer Jony Ive to develop a line of products that had larger cultural ramifications, beginning with the \"Think different\" advertising campaign and leading to the Apple Store, App Store (iOS), iMac, iPad, iPod, iPhone, iTunes, and iTunes Store. In 2001, the original Mac OS was replaced with the completely new Mac OS X (later known as macOS), based on NeXT's NeXTSTEP platform, giving the operating system a modern Unix-based foundation for the first time. In 2003, Jobs was diagnosed with a pancreatic neuroendocrine tumor. He died of respiratory arrest related to the tumor in 2011, at the age of 56, with Tim Cook succeeding him as CEO of Apple. In 2022, he was posthumously awarded the Presidential Medal of Freedom.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**واکشی از لینک**"
+      ],
+      "metadata": {
+        "id": "8yyom9VWl6kS"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "from bs4 import BeautifulSoup\n",
+        "\n",
+        "url = \"https://en.wikipedia.org/wiki/2021_World_Figure_Skating_Championships\"\n",
+        "\n",
+        "# فرستادن درخواست با User-Agent برای جلوگیری از بلاک شدن\n",
+        "headers = {\"User-Agent\": \"Mozilla/5.0\"}\n",
+        "response = requests.get(url, headers=headers)\n",
+        "\n",
+        "# بررسی وضعیت پاسخ\n",
+        "if response.status_code == 200:\n",
+        "    # تبدیل HTML به Soup\n",
+        "    soup = BeautifulSoup(response.text, \"lxml\")\n",
+        "\n",
+        "    # استخراج همه‌ی پاراگراف‌ها\n",
+        "    paragraphs = soup.find_all(\"p\")\n",
+        "\n",
+        "    # ترکیب همه پاراگراف‌ها در یک متن\n",
+        "    full_text = \"\\n\".join([p.get_text() for p in paragraphs])\n",
+        "\n",
+        "    print(full_text[:])\n",
+        "else:\n",
+        "    print(\"eror:\", response.status_code)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "vdQbPDDylL3U",
+        "outputId": "4a24ce39-e840-4252-bd06-0dc5d90ca294"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "\n",
+            "The 2021 World Figure Skating Championships were held from March 22 to 28, 2021, at the Ericsson Globe in Stockholm, Sweden. Sanctioned by the International Skating Union (ISU), the World Championships are considered the most prestigious event in figure skating.[1] Medals were awarded in men's singles, women's singles, pair skating, and ice dance. The competition determined the entry quotas for each skating federation at the 2022 World Championships and was the first qualifying event for the 2022 Winter Olympics.\n",
+            "\n",
+            "The World Championships were the only ISU Championship event held during the 2020–21 season, while the European Championships, Four Continents Championships, and World Junior Championships were all cancelled due to the COVID-19 pandemic. The event was held without spectators, while attendees at the competition remained in a bubble – that is, in a cluster made up exclusively of individuals who have been thoroughly tested and were unlikely to spread infection – throughout the event.\n",
+            "\n",
+            "Nathan Chen of the United States won the men's event, Anna Shcherbakova of Russia won the women's event, Anastasia Mishina and Aleksandr Galliamov of Russia won the pairs event, and Victoria Sinitsina and Nikita Katsalapov of Russia won the ice dance event. Because of a ruling by the Court of Arbitration for Sport, all Russian skaters competed as representatives of the Figure Skating Federation of Russia (FSR).\n",
+            "\n",
+            "The COVID-19 pandemic began with an outbreak in China in December 2019. Soon after, it spread to other areas of Asia and then worldwide in early 2020. The World Health Organization declared the outbreak a public health emergency of international concern on January 30, 2020, and assessed the outbreak as having become a pandemic on March 11, 2020.[2]\n",
+            "\n",
+            "COVID‑19 transmission occurs when infectious particles are breathed in or come into contact with the eyes, nose, or mouth. The risk is highest when people are in close proximity, but small airborne particles containing the virus can remain suspended in the air and travel over long distances, particularly indoors. People can remain contagious for up to twenty days and can spread the virus even if they do not develop symptoms themselves.[3] Several COVID-19 vaccines were approved and distributed, many of which initiated mass vaccination campaigns. Other preventive measures included social distancing, quarantining, ventilation of indoor spaces, use of face masks or coverings in public, covering coughs and sneezes, and hand washing.[4] One testing method to see if a person was infected with COVID-19 was real-time reverse transcription polymerase chain reaction (PCR),[5] which was used at the 2021 World Championships.[6]\n",
+            "\n",
+            "The pandemic caused significant disruption to the 2020–21 figure skating season. The complete Junior Grand Prix series was cancelled on July 20, 2020.[7] On October 16, 2020, the International Skating Union (ISU) announced the cancellation of the 2021 Four Continents Figure Skating Championships,[8] and on November 24, 2020, the 2021 World Junior Figure Skating Championships.[9] The 2020–21 Grand Prix of Figure Skating Final, 2021 European Figure Skating Championships, and 2021 World Synchronized Skating Championships were definitively cancelled on December 10, 2020.[10]\n",
+            "\n",
+            "Despite these cancellations, ISU Vice President Alexander Lakernik stated that the ISU would make \"every effort\" to hold the World Championships.[11] A Swedish government ban which limited entrants in international competitions hosted by Sweden to only those from the European Union was lifted on November 20, 2020.[12] However, on December 22, 2020, Skate Sweden cancelled all domestic championships for the remainder of the 2020–21 season in compliance with Public Health Agency of Sweden guidelines.[13]\n",
+            "\n",
+            "During its January 28 meeting, the ISU Council affirmed that the World Championships would proceed as scheduled.[14] The council also announced that the status of the World Championships as a qualifying event for the 2022 Winter Olympics would be reevaluated based on the entries received by the ISU as of the March 1, 2021, deadline.[15] On March 4, the ISU affirmed that the Olympic qualifying process would proceed as previously announced, as nearly all ISU member nations with qualified skaters had confirmed entry to the 2021 World Championships.[16] The 2021 World Figure Skating Championships were ultimately held from March 22 to 28, 2021, at the Ericsson Globe in Stockholm.[17]\n",
+            "\n",
+            "In November 2020, Skate Canada stated that if the 2021 World Championships continued as planned, it might not participate due to insufficient training time and preparation on behalf of its skaters, as well as the mandatory fourteen-day quarantine upon return to Canada.[18] Despite the cancellation of the 2021 Canadian Championships and a lack of competitive opportunities for its skaters, Skate Canada announced its selection criteria for naming a World Championship team in January 2021.[19]\n",
+            "\n",
+            "The Japan Skating Federation withdrew its delegation from the 2021 World Short Track Speed Skating Championships scheduled for early March,[20] calling into question the participation of its figure skaters at the 2021 World Championships.[21] The Japan Skating Federation eventually sent skaters to the World Championships due to it being an Olympic qualifying event. The Japanese delegation arrived at the competition throughout the weekend of March 20–22, with all athletes receiving a negative PCR test upon arrival.[22]\n",
+            "\n",
+            "Skaters arrived at the event with varying levels of preparation due to their respective governments' and home federations' responses to the pandemic.[23][24] Multiple skaters had been unable to train with their primary coaches due to travel or visa restrictions and spent the season in temporary training situations, either on their own or with different coaches.[25][26] Many pairs and dance teams were also unable to have physical contact when they could train on the ice due to their nations' respective restrictions, further limiting their preparedness.[18]\n",
+            "\n",
+            "In January 2021, Gabriella Papadakis and Guillaume Cizeron of France, the defending world champions in ice dance, announced that they would not compete at the World Championships; they planned to focus instead on the 2022 Winter Olympics.[27] Nathan Chen of the United States, the defending world champion in the men's event, stated that while he was grateful for the opportunity to compete, he had concerns about COVID-19 safety protocols, citing the fourteen-hour flight to Sweden as his biggest concern.[6] Pairs skater Kirsten Moore-Towers of Canada described \"anxiousness over the unknown\".[28] Some skaters, however, felt that adequate precautions were being taken and they would likely be safe at the event. Emily Bausback of Canada stated: \"I knew we wouldn't be going if it wasn't safe... I feel comfortable with the situation.\"[29] Elizaveta Tuktamysheva of Russia expressed no hesitation about competing at the World Championships, having already had COVID-19.[30]\n",
+            "\n",
+            "During the months preceding the arrival of skaters and officials in Stockholm, a petition calling for the ISU to implement stricter quarantine measures and a tighter bubble, a cluster made up exclusively of individuals who have been thoroughly tested and unlikely to spread infection,[31] garnered thousands of signatures.[32] The Ericsson Globe (the site of the competition arena), two practice arenas, and a dedicated hotel for skaters and officials were interconnected and allowed passage from one place to another via indoor walkways. A negative PCR test was required within forty-eight hours of arrival in Sweden, with a series of follow-up tests scheduled afterward. However, there was no quarantine requirement prior to the start of the competition.[6]\n",
+            "\n",
+            "The attendance of skaters representing the Figure Skating Federation of Russia (FSR) drew particular scrutiny, as the federation was accused of holding several domestic and international events in violation of the ISU's COVID-19 safety protocols.[23] Despite some precautionary measures being taken, the organizers of the 2020 Rostelecom Cup, as with other Russian domestic competitions during the season, came under criticism for allowing a large audience and an insufficient enforcement of mandates regarding social distancing or proper use of face masks. A focal point of criticism was the decision to hold the traditional post-competition banquet, where many skaters were documented not wearing masks or socially distancing at all, as well as sharing food from a communal buffet.[33] Additionally, a large number of Russian skaters had contracted COVID-19 during the season, including Elizaveta Tuktamysheva, Victoria Sinitsina, and Nikita Katsalapov.[34][35] Nevertheless, all members of the Russian delegation tested negative during the initial round of testing administered upon arrival in Stockholm.[36]\n",
+            "\n",
+            "Victoria, Crown Princess of Sweden, had been scheduled to participate in the opening ceremony before she and her husband, Prince Daniel, contracted COVID-19 a few weeks prior to the event.[37] She instead appeared in a video message from Haga Palace to welcome the athletes.[38]\n",
+            "\n",
+            "Delegations began arriving on March 20 and 21, and members underwent the required multiple tests and quarantine until a negative result was returned. Attendees were not eligible for accreditation until they passed a second PCR test. After receiving accreditation, limited testing was conducted, and attendees were only required to fill out daily symptom questionnaires and undergo temperature checks.[39]\n",
+            "\n",
+            "Attendees at the competition remained in a bubble throughout the event.[17] On March 22, the ISU announced that one positive case had been found during one of the initial rounds of testing and that contact tracing procedures were being undertaken.[40] The skater with the positive case, later revealed to be Viktoriia Safonova of Belarus, was quarantined and not allowed to compete. Safonova's coach subsequently tested negative in a second round of testing, and Safonova, who had traveled to Stockholm from a different location, had had no contact with the other members of the Belarusian team or their coaches.[41] On March 24, the ISU announced that a second positive case had been found during the initial round of testing. Without accreditation, neither skater with positive test results had been allowed into the competition bubble.[42]\n",
+            "\n",
+            "On March 26, the ISU announced that a third positive case had been found, this time within the bubble.[43] After the event, Simon Proulx-Sénécal of Armenia revealed that he had tested positive on March 25, the day before the ice dance competition was scheduled to start, and asked for a re-test prior to the rhythm dance segment on March 26. As the test result did not come back until after the rhythm dance had concluded, Proulx-Sénécal and his partner, Tina Garabedian, were not allowed to compete. The result came back as a second positive. Proulx-Sénécal expressed that he believed his first test was a false positive, as his federation later received a written test result stating that his second test, taken the morning of the rhythm dance, was negative, not positive as initially conveyed to their team doctor.[44] He subsequently tested negative twice more, once the day after the rhythm dance (March 27) and again upon returning to Montreal on March 29.[45]\n",
+            "\n",
+            "Normally, the number of entries from each nation for the 2021 World Championships would have been based on the results of the 2020 World Championships. Since the 2020 World Championships were cancelled, results from the 2019 World Championships were used instead. These nations were eligible to enter more than one skater or team in the indicated disciplines.[46]\n",
+            "\n",
+            "In 2016, an independent report commissioned by the World Anti-Doping Agency (WADA) confirmed allegations that the Russian Olympic team had been involved in a state-sponsored doping program, active from at least late 2011 through August 2015.[47] On December 9, 2019, the WADA banned Russia from all international competitions after it found that data provided by the Russian Anti-Doping Agency had been manipulated by Russian authorities in order to protect athletes involved in its state-sponsored doping scheme.[48] Under the ban imposed by the Court of Arbitration for Sport, Russian athletes could not use the Russian flag or anthem in international competition and had to present themselves as \"Neutral Athletes\" or a \"Neutral Team\" at any world championships until December 16, 2022.[49] Russian skaters competed under a modified flag of the Figure Skating Federation of Russia and the name \"FSR\" at the 2021 World Championships. The ISU also approved the use of Tchaikovsky's Piano Concerto No. 1 in lieu of the Russian national anthem during medal ceremonies.[50]\n",
+            "\n",
+            "The ISU published a complete list of entrants on March 2, 2021.[51][52][53][54]\n",
+            "\n",
+            "Men and women competing in single skating first performed a short program. Women performed their short programs on Wednesday, March 24; men performed their short programs on Thursday, March 25.[17] Lasting no more than 2 minutes 40 seconds,[68] the short program had to include the following elements:\n",
+            "\n",
+            "For men: one double or triple Axel; one triple or quadruple jump; one jump combination consisting of a double jump and a triple jump, or a quadruple jump and a double jump or triple jump; one flying spin; one camel spin or sit spin with a change of foot; one spin combination with a change of foot; and a step sequence using the full ice surface.[69]\n",
+            "\n",
+            "For women: one double or triple Axel; one triple jump; one jump combination consisting of a double jump and a triple jump, or two triple jumps; one flying spin; one layback spin, sideways leaning spin, camel spin, or sit spin without a change of foot; one spin combination with a change of foot; and one step sequence using the full ice surface.[69]\n",
+            "\n",
+            "The top 24 skaters after completion of the short program component of the competition moved on to the free skating component. Women performed their free skates on Friday, March 26; men performed their free skates on Saturday, March 27.[17] The free skate performance for both men and women could last no more than 4 minutes,[68] and had to include the following: seven jump elements, of which one had to be an Axel-type jump; three spins, of which one had to be a spin combination, one had to be a flying spin, and one had to be a spin with only one position; a step sequence; and a choreographic sequence.[70]\n",
+            "\n",
+            "Couples competing in pair skating performed their short programs on Wednesday, March 24.[17] Lasting no more than 2 minutes 40 seconds,[71] it had to include the following elements: one pair lift, one twist lift, one double or triple throw jump, one double or triple solo jump, one solo spin combination with a change of foot, one death spiral, and a step sequence using the full ice surface.[72]\n",
+            "\n",
+            "The top 20 couples after completion of the short program component moved on to the free skating component, which were performed on Thursday, March 25.[17] The free skate performance could last no more than 4 minutes,[68] and had to include the following: three pair lifts, of which one had to be a twist lift; two different throw jumps; one solo jump; one jump combination or sequence; one pair spin combination; one death spiral; and a choreographic sequence.[73]\n",
+            "\n",
+            "Couples competing in ice dance performed their rhythm dances on Friday, March 26.[17] Lasting no more than 2 minutes 50 seconds,[68] the rhythm dance had to include the following elements: the pattern dance, the pattern dance step sequence, one dance lift, one set of sequential twizzles, and one step sequence.[74][75] The required pattern dance was the Finnstep – a fun, fast ballroom-style dance[76] – and music came from musicals or operettas.[77]\n",
+            "\n",
+            "The top 20 couples, after completing the rhythm dance component of the competition moved on to the free dance component, which was held on Saturday, March 27.[17] The free dance performance could last no longer than 4 minutes,[68] and had to include the following: three dance lifts, one dance spin, one set of synchronized twizzles, one step sequence in hold, one step sequence while on one skate and not touching, and three choreographic elements, of which one had to be a choreographic character step sequence.[78][75]\n",
+            "\n",
+            "For the 2020–21 season, all of the technical elements in any figure skating performance – such as jumps, spins, and lifts – were assigned a predetermined base point value and were then scored by a panel of nine judges on a scale from −5 to +5 based on their quality of execution.[79] The judging panel's Grade of Execution (GOE) was determined by calculating the trimmed mean (that is, an average after deleting the highest and lowest scores), and this GOE was added to the base value to come up with the final score for each element. The panel's scores for all elements were added together to generate a total element score.[80] At the same time, judges evaluated each performance based on five program components – skating skills, transitions, performance/execution, composition, and interpretation – and assigned a score from .25 to 10 in .25 point increments. The judging panel's final score for each program component was also determined by calculating the trimmed mean. Those scores were then multiplied by the factor shown on the following chart; the results were added together to generate a total program component score.[81]\n",
+            "\n",
+            "Deductions were applied for certain violations like time infractions, stops and restarts, or falls.[82] The total element score and total program component score were added together, minus any deductions, to generate a final performance score for each skater or team.[83]\n",
+            "\n",
+            "Medals were awarded to the skaters or teams who achieved the highest overall placements in each discipline.\n",
+            "\n",
+            "Small medals were awarded to the skaters or teams who achieved the highest short program or rhythm dance placements in each discipline.\n",
+            "\n",
+            "Small medals were awarded to the skaters or teams who achieved the highest free skate or free dance placements in each discipline.\n",
+            "\n",
+            "Nathan Chen of the United States, who had been in third place after the short program, rallied back in the free skate, successfully performing five quadruple jumps and finishing with an almost 30-point lead over the silver medalist, Yuma Kagiyama of Japan. This was Chen's third World Championship win in a row; he was the first man to win three titles in a row since Patrick Chan of Canada (2011‍–‍2013), and the first American skater since Scott Hamilton (1982‍–‍1984).[85] Chen had not lost an international event since finishing fifth at the 2018 Winter Olympics. In a statement to the media, Chen said, \"The fact that I'm able to be here at this world championship after that unprecedented year... I'm very elated right now.\"[86]\n",
+            "\n",
+            "Yuzuru Hanyu of Japan, two-time Olympic champion and two-time World champion, was in the lead after the short program, but an error on his quadruple loop and stumbles on his triple Axels caused him to finish the competition in third place. It was Hanyu's eighth World Championship medal since 2012.[87]\n",
+            "\n",
+            "On the other hand, Vincent Zhou of the United States, who won the bronze medal at the 2019 World Championships, had a disastrous performance during his short program, failing to land all three of his jumping elements. He finished in 25th place, missing the cut-off for the free skate. \"It's always better to talk about it than drown in my own misery,\" Zhou stated afterward. \"To me, it feels like I let down my teammates and myself, but dwelling on those things is only going to make me feel worse.\"[88]\n",
+            "\n",
+            "Yi Christy Leung of Hong Kong withdrew prior to the short program due to an injury.[90] Likewise, Maé-Bérénice Méité of France suffered an Achilles tendon rupture from a fall during her short program and withdrew from the competition.[91]\n",
+            "\n",
+            "Anna Shcherbakova, representing the Figure Skating Federation of Russia, won the gold medal, while her teammates Elizaveta Tuktamysheva and Alexandra Trusova finished second and third, respectively. Trusova had been in twelfth place after the short program, but rallied back with the highest score in the free skating to win the bronze medal. It was the first podium sweep in the women's event at the World Championships since 1991, when skaters from the United States captured the top three spots.[92]\n",
+            "\n",
+            "Karen Chen of the United States finished in fourth place, performing an \"inspired program\" and securing three spots for the United States in the women's event at the 2022 Winter Olympics. This was a near-repeat of Chen's performance at the 2017 World  Championships, where she had also finished fourth, securing three spots for the United States at the 2018 Winter Olympics.[93]\n",
+            "\n",
+            "Anastasia Mishina and Aleksandr Galliamov, representing the Figure Skating Federation of Russia, won the gold medal at their first World Championship competition after winning the free skating segment with their performance to the Queen songs \"Bohemian Rhapsody\" and \"We Are the Champions\".[95] Mishina and Galliamov had won the World Junior Championships just two years earlier. They were the first pairs team to win the World Championships in their first appearance since Ekaterina Gordeeva and Sergei Grinkov in 1986.[96]\n",
+            "\n",
+            "Sui Wenjing and Han Cong of China, 2018 Winter Olympic silver medalists and two-time World Champions, finished in second place. Due to injury, Sui and Han had only been able to practice on ice together for two months. Meanwhile, Aleksandra Boikova and Dmitrii Kozlovskii of Russia, who were in the lead after the short program, finished in third place.[97]\n",
+            "\n",
+            "Tina Garabedian and Simon Proulx-Sénécal of Armenia withdrew prior to the rhythm dance for an unspecified medical reason, which was later revealed to be a false positive COVID-19 test from Proulx-Sénécal.[99][44]\n",
+            "\n",
+            "Victoria Sinitsina and Nikita Katsalapov, representing the Figure Skating Federation of Russia, won both the rhythm dance and free dance segments, including a personal best score in the free dance, to win the World Championship title. They were the first Russian team to win a World Championship title in ice dance since Oksana Domnina and Maxim Shabalin in 2009.[77] Madison Hubbell and Zachary Donohue of the United States finished in second place with a \"captivating program.\"[100] \"It is really a joy to skate together,\" Hubbell stated afterward, \"but there is also that little dissatisfaction of not reaching our goal of bringing home the gold medal.\"[100] Likewise, their teammates Madison Chock and Evan Bates had hoped to win a third world medal with their iconic snake charming program, but finished in fourth place after Bates made a minor error on his twizzles. Still, their high performance, along with that of Hubbell and Donohue, netted the United States three quota spots in ice dance at the 2022 Winter Olympics.[101]\n",
+            "\n",
+            "Piper Gilles and Paul Poirier of Canada, who had hoped to win a World Championship medal in Montreal, which had been scheduled to host the 2020 World Championships before it was cancelled due to the COVID-19 pandemic, finished in third place. Their total score of 214.35 was a new personal best. \"I think we're absolutely thrilled with what we did today,\" Gilles said afterward. \"We just love to perform and skate and I think that came out on the ice today.\"[102]\n",
+            "\n",
+            "The results of the 2021 World Championships determined 82 spots for the 2022 Winter Olympics: 23 entries in the men's event, 24 in the women's event, 16 in the pairs event, and 19 in the ice dance event. One allocated spot in men's singles was unused due to an insufficient number of member nations meeting the criteria, and the spot was re-allocated to the next qualifying event: the 2021 Nebelhorn Trophy.[101]\n",
+            "\n",
+            "Athletes from Russia would compete under the Russian Olympic Committee (ROC) flag at the 2022 Winter Olympics.[104]\n",
+            "\n",
+            "The following ISU member nations earned Olympic quota spots for their National Olympic Committee at the World Championships. Countries denoted with an asterisk (*) had the opportunity to earn a second or third berth at the 2021 Nebelhorn Trophy.[101]\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "exel"
+      ],
+      "metadata": {
+        "id": "hl2qrxNts5XI"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install pandas\n",
+        "\n",
+        "import pandas as pd\n",
+        "\n",
+        "path = \"/content/F1Drivers_Dataset.csv\"\n",
+        "\n",
+        "data = pd.read_csv(path)\n",
+        "\n",
+        "print(\"✅:\")\n",
+        "print(data.head())\n",
+        "\n",
+        "print(\"\\nℹ️:\")\n",
+        "print(data.info())\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "u-q8K505s0e-",
+        "outputId": "6851d595-eaab-4b22-95f0-9ddc3ae6b826"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.12/dist-packages (2.2.2)\n",
+            "Requirement already satisfied: numpy>=1.26.0 in /usr/local/lib/python3.12/dist-packages (from pandas) (2.0.2)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.12/dist-packages (from pandas) (2.9.0.post0)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.12/dist-packages (from pandas) (2025.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.12/dist-packages (from pandas) (2025.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.12/dist-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)\n",
+            "✅:\n",
+            "              Driver     Nationality                         Seasons  \\\n",
+            "0        Carlo Abate           Italy                    [1962, 1963]   \n",
+            "1   George Abecassis  United Kingdom                    [1951, 1952]   \n",
+            "2      Kenny Acheson  United Kingdom                    [1983, 1985]   \n",
+            "3  Andrea de Adamich           Italy  [1968, 1970, 1971, 1972, 1973]   \n",
+            "4     Philippe Adams         Belgium                          [1994]   \n",
+            "\n",
+            "   Championships  Race_Entries  Race_Starts  Pole_Positions  Race_Wins  \\\n",
+            "0            0.0           3.0          0.0             0.0        0.0   \n",
+            "1            0.0           2.0          2.0             0.0        0.0   \n",
+            "2            0.0          10.0          3.0             0.0        0.0   \n",
+            "3            0.0          36.0         30.0             0.0        0.0   \n",
+            "4            0.0           2.0          2.0             0.0        0.0   \n",
+            "\n",
+            "   Podiums  Fastest_Laps  ...  Championship Years  Decade Pole_Rate  \\\n",
+            "0      0.0           0.0  ...                 NaN    1960       0.0   \n",
+            "1      0.0           0.0  ...                 NaN    1950       0.0   \n",
+            "2      0.0           0.0  ...                 NaN    1980       0.0   \n",
+            "3      0.0           0.0  ...                 NaN    1970       0.0   \n",
+            "4      0.0           0.0  ...                 NaN    1990       0.0   \n",
+            "\n",
+            "   Start_Rate  Win_Rate  Podium_Rate  FastLap_Rate  Points_Per_Entry  \\\n",
+            "0    0.000000       0.0          0.0           0.0          0.000000   \n",
+            "1    1.000000       0.0          0.0           0.0          0.000000   \n",
+            "2    0.300000       0.0          0.0           0.0          0.000000   \n",
+            "3    0.833333       0.0          0.0           0.0          0.166667   \n",
+            "4    1.000000       0.0          0.0           0.0          0.000000   \n",
+            "\n",
+            "   Years_Active  Champion  \n",
+            "0             2     False  \n",
+            "1             2     False  \n",
+            "2             2     False  \n",
+            "3             5     False  \n",
+            "4             1     False  \n",
+            "\n",
+            "[5 rows x 22 columns]\n",
+            "\n",
+            "ℹ️:\n",
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 868 entries, 0 to 867\n",
+            "Data columns (total 22 columns):\n",
+            " #   Column              Non-Null Count  Dtype  \n",
+            "---  ------              --------------  -----  \n",
+            " 0   Driver              868 non-null    object \n",
+            " 1   Nationality         868 non-null    object \n",
+            " 2   Seasons             868 non-null    object \n",
+            " 3   Championships       868 non-null    float64\n",
+            " 4   Race_Entries        868 non-null    float64\n",
+            " 5   Race_Starts         868 non-null    float64\n",
+            " 6   Pole_Positions      868 non-null    float64\n",
+            " 7   Race_Wins           868 non-null    float64\n",
+            " 8   Podiums             868 non-null    float64\n",
+            " 9   Fastest_Laps        868 non-null    float64\n",
+            " 10  Points              868 non-null    float64\n",
+            " 11  Active              868 non-null    bool   \n",
+            " 12  Championship Years  34 non-null     object \n",
+            " 13  Decade              868 non-null    int64  \n",
+            " 14  Pole_Rate           868 non-null    float64\n",
+            " 15  Start_Rate          868 non-null    float64\n",
+            " 16  Win_Rate            868 non-null    float64\n",
+            " 17  Podium_Rate         868 non-null    float64\n",
+            " 18  FastLap_Rate        868 non-null    float64\n",
+            " 19  Points_Per_Entry    868 non-null    float64\n",
+            " 20  Years_Active        868 non-null    int64  \n",
+            " 21  Champion            868 non-null    bool   \n",
+            "dtypes: bool(2), float64(14), int64(2), object(4)\n",
+            "memory usage: 137.4+ KB\n",
+            "None\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "csv"
+      ],
+      "metadata": {
+        "id": "IJzYetQw9z1m"
+      }
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "b11d0c81",
+        "outputId": "e6ef721c-8d05-4379-e145-04c8f5b6857f"
+      },
+      "source": [
+        "!pip install pandas\n",
+        "\n",
+        "import pandas as pd\n",
+        "\n",
+        "path = \"/content/winequality-white.csv\"\n",
+        "\n",
+        "data = pd.read_csv(path, sep=';')\n",
+        "\n",
+        "print(\"✅\")\n",
+        "print(data.head())\n",
+        "\n",
+        "print(\"\\nℹ️\")\n",
+        "print(data.info())\n"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.12/dist-packages (2.2.2)\n",
+            "Requirement already satisfied: numpy>=1.26.0 in /usr/local/lib/python3.12/dist-packages (from pandas) (2.0.2)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.12/dist-packages (from pandas) (2.9.0.post0)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.12/dist-packages (from pandas) (2025.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.12/dist-packages (from pandas) (2025.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.12/dist-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)\n",
+            "✅\n",
+            "   fixed acidity  volatile acidity  citric acid  residual sugar  chlorides  \\\n",
+            "0            7.0              0.27         0.36            20.7      0.045   \n",
+            "1            6.3              0.30         0.34             1.6      0.049   \n",
+            "2            8.1              0.28         0.40             6.9      0.050   \n",
+            "3            7.2              0.23         0.32             8.5      0.058   \n",
+            "4            7.2              0.23         0.32             8.5      0.058   \n",
+            "\n",
+            "   free sulfur dioxide  total sulfur dioxide  density    pH  sulphates  \\\n",
+            "0                 45.0                 170.0   1.0010  3.00       0.45   \n",
+            "1                 14.0                 132.0   0.9940  3.30       0.49   \n",
+            "2                 30.0                  97.0   0.9951  3.26       0.44   \n",
+            "3                 47.0                 186.0   0.9956  3.19       0.40   \n",
+            "4                 47.0                 186.0   0.9956  3.19       0.40   \n",
+            "\n",
+            "   alcohol  quality  \n",
+            "0      8.8        6  \n",
+            "1      9.5        6  \n",
+            "2     10.1        6  \n",
+            "3      9.9        6  \n",
+            "4      9.9        6  \n",
+            "\n",
+            "ℹ️\n",
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 4898 entries, 0 to 4897\n",
+            "Data columns (total 12 columns):\n",
+            " #   Column                Non-Null Count  Dtype  \n",
+            "---  ------                --------------  -----  \n",
+            " 0   fixed acidity         4898 non-null   float64\n",
+            " 1   volatile acidity      4898 non-null   float64\n",
+            " 2   citric acid           4898 non-null   float64\n",
+            " 3   residual sugar        4898 non-null   float64\n",
+            " 4   chlorides             4898 non-null   float64\n",
+            " 5   free sulfur dioxide   4898 non-null   float64\n",
+            " 6   total sulfur dioxide  4898 non-null   float64\n",
+            " 7   density               4898 non-null   float64\n",
+            " 8   pH                    4898 non-null   float64\n",
+            " 9   sulphates             4898 non-null   float64\n",
+            " 10  alcohol               4898 non-null   float64\n",
+            " 11  quality               4898 non-null   int64  \n",
+            "dtypes: float64(11), int64(1)\n",
+            "memory usage: 459.3 KB\n",
+            "None\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "pdf"
+      ],
+      "metadata": {
+        "id": "0PI6q4Ve-OFM"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install PyPDF2\n",
+        "from PyPDF2 import PdfReader\n",
+        "import os\n",
+        "\n",
+        "pdf_path = \"/content/Is human oversight to AI systems still possible.pdf\"\n",
+        "\n",
+        "if os.path.exists(pdf_path):\n",
+        "    reader = PdfReader(pdf_path)\n",
+        "    all_text = []\n",
+        "    for p in reader.pages:\n",
+        "        t = p.extract_text()\n",
+        "        if t:\n",
+        "            all_text.append(t)\n",
+        "    doc_text = \"\\n\".join(all_text)\n",
+        "    print(\"تعداد صفحات:\", len(reader.pages))\n",
+        "    print(doc_text[:764])\n",
+        "else:\n",
+        "    print(f\"Error: File not found at {pdf_path}. Please check the file path and ensure the file is uploaded.\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2Ql8JHoS-SCf",
+        "outputId": "c512bdc1-572d-4aa7-9f85-21d82cd3e40f"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: PyPDF2 in /usr/local/lib/python3.12/dist-packages (3.0.1)\n",
+            "تعداد صفحات: 4\n",
+            "New BIOTECHNOLOGY 85 (2025) 59–62\n",
+            "Available online 13 December 2024\n",
+            "1871-6784/© 2024 The Authors. Published by Elsevier B.V. This is an open access article under the CC BY license ( http://creativecommons.org/licenses/by/4.0/ ).Editorial\n",
+            "Is human oversight to AI systems still possible?\n",
+            "ARTICLE INFO\n",
+            "Keywords:\n",
+            "Artificial intelligence\n",
+            "Biotechnology\n",
+            "Deep learning\n",
+            "Digital transformation\n",
+            "Machine learningABSTRACT\n",
+            "The rapid proliferation of artificial intelligence (AI) systems across diverse domains raises critical questions about \n",
+            "the feasibility of meaningful human oversight, particularly in high-stakes domains such as new biotechnology. As \n",
+            "AI systems grow increasingly complex, opaque, and autonomous, ensuring responsible use becomes a formidable \n",
+            "challenge. \n"
+          ]
+        }
+      ]
+    }
+  ]
+}
