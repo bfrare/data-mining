@@ -1,4 +1,4 @@
-# read_csv
+# Read and Extract PDF Text
 import os
 import pandas as pd # pyright: ignore[reportMissingModuleSource]
 
@@ -11,3 +11,4 @@ if os.path.exists(csv_path):
     print(df.info())
 else:
     print(f"⚠️ : {csv_path}")
+
