@@ -10,7 +10,8 @@ if response.status_code == 200:
     soup = BeautifulSoup(response.text, "lxml")
     paragraphs = soup.find_all("p")
     full_text = "\n".join([p.get_text() for p in paragraphs])
-    print("✅ Wikipedia page fetched successfully. Text length:", len(full_text))
+    print("✅ :", len(full_text))
     print(full_text[:])
 else:
-    print("⚠️ Request error:", response.status_code)
+
+    print("⚠️ :", response.status_code)
